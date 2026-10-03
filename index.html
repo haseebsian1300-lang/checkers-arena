@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Checkers Arena</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+<main class="game-container">
+
+
+    <!-- HEADER -->
+
+    <header class="game-header">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                ♛
+            </div>
+
+            <div>
+
+                <h1>CHECKERS</h1>
+
+                <p>
+                    Classic Checkers Arena
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <button
+            id="restartButton"
+            class="restart-button"
+        >
+            ↻ Restart
+        </button>
+
+    </header>
+
+
+
+    <!-- MODE -->
+
+    <section class="control-panel">
+
+        <div class="control-title">
+            GAME MODE
+        </div>
+
+
+        <div class="mode-buttons">
+
+            <button
+                id="localModeButton"
+                class="mode-button active"
+            >
+                👥 2 Players
+            </button>
+
+
+            <button
+                id="aiModeButton"
+                class="mode-button"
+            >
+                🤖 Play vs AI
+            </button>
+
+
+            <button
+                id="onlineModeButton"
+                class="mode-button"
+            >
+                🌐 Online
+            </button>
+
+        </div>
+
+
+        <div
+            id="aiSettings"
+            class="settings-row hidden"
+        >
+
+            <label>
+
+                Difficulty
+
+                <select id="aiDifficulty">
+
+                    <option value="easy">
+                        Easy
+                    </option>
+
+                    <option value="medium" selected>
+                        Medium
+                    </option>
+
+                    <option value="hard">
+                        Hard
+                    </option>
+
+                </select>
+
+            </label>
+
+
+            <label>
+
+                Your Color
+
+                <select id="humanColor">
+
+                    <option value="red">
+                        🔴 Red
+                    </option>
+
+                    <option value="black">
+                        ⚫ Black
+                    </option>
+
+                </select>
+
+            </label>
+
+        </div>
+
+
+        <div
+            id="onlineSettings"
+            class="settings-row hidden"
+        >
+
+            <button
+                id="createRoomButton"
+                class="online-button"
+            >
+                Create Room
+            </button>
+
+
+            <input
+                id="roomInput"
+                type="text"
+                maxlength="6"
+                placeholder="Room ID"
+            >
+
+
+            <button
+                id="joinRoomButton"
+                class="online-button"
+            >
+                Join Room
+            </button>
+
+        </div>
+
+
+        <div
+            id="roomInfo"
+            class="room-info hidden"
+        >
+
+            <span>
+                ROOM
+            </span>
+
+            <strong id="roomIdText">
+                ------
+            </strong>
+
+            <button
+                id="copyRoomButton"
+            >
+                Copy
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- PLAYERS -->
+
+    <section class="game-info">
+
+
+        <div
+            id="redPlayerCard"
+            class="player-card red-card"
+        >
+
+            <div class="player-avatar red-piece">
+                <span></span>
+            </div>
+
+
+            <div class="player-details">
+
+                <strong id="redPlayerName">
+                    Red
+                </strong>
+
+                <small id="redCount">
+                    12 pieces
+                </small>
+
+                <small id="redCaptured">
+                    Captured: 0
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="turn-center">
+
+            <div class="turn-box">
+
+                <span>TURN</span>
+
+                <strong id="turnText">
+                    Black
+                </strong>
+
+            </div>
+
+
+            <div
+                id="timer"
+                class="timer"
+            >
+                30
+            </div>
+
+        </div>
+
+
+
+        <div
+            id="blackPlayerCard"
+            class="player-card black-card"
+        >
+
+            <div class="player-avatar black-piece">
+                <span></span>
+            </div>
+
+
+            <div class="player-details">
+
+                <strong id="blackPlayerName">
+                    Black
+                </strong>
+
+                <small id="blackCount">
+                    12 pieces
+                </small>
+
+                <small id="blackCaptured">
+                    Captured: 0
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- STATS -->
+
+    <section class="stats-bar">
+
+        <div class="stat">
+
+            <span>
+                MOVES
+            </span>
+
+            <strong id="moveCount">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat-divider"></div>
+
+
+        <div class="stat">
+
+            <span>
+                CAPTURES
+            </span>
+
+            <strong id="captureCount">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat-divider"></div>
+
+
+        <div class="stat">
+
+            <span>
+                KINGS
+            </span>
+
+            <strong id="queenCount">
+                0
+            </strong>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- BOARD -->
+
+    <section class="board-area">
+
+        <div class="board-glow"></div>
+
+        <div
+            id="board"
+            class="board"
+        ></div>
+
+    </section>
+
+
+
+    <!-- LEGEND -->
+
+    <section class="piece-legend">
+
+        <div class="legend-title">
+            PIECE GUIDE
+        </div>
+
+
+        <div class="legend-items">
+
+
+            <div class="legend-item">
+
+                <div class="legend-piece red-piece"></div>
+
+                <span>
+                    Red Pawn
+                </span>
+
+            </div>
+
+
+            <div class="legend-item">
+
+                <div class="legend-piece black-piece"></div>
+
+                <span>
+                    Black Pawn
+                </span>
+
+            </div>
+
+
+            <div class="legend-item">
+
+                <div class="legend-piece king-red">
+                    ♛
+                </div>
+
+                <span>
+                    Red King
+                </span>
+
+            </div>
+
+
+            <div class="legend-item">
+
+                <div class="legend-piece king-black">
+                    ♛
+                </div>
+
+                <span>
+                    Black King
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- STATUS -->
+
+    <section class="game-message-container">
+
+        <div
+            id="statusIndicator"
+            class="status-indicator"
+        ></div>
+
+
+        <p id="gameMessage">
+            Black's turn — select a piece.
+        </p>
+
+    </section>
+
+
+
+    <!-- GAME OVER -->
+
+    <section
+        id="gameOverPanel"
+        class="game-over-panel hidden"
+    >
+
+        <div class="game-over-card">
+
+            <div class="winner-crown">
+                ♛
+            </div>
+
+
+            <div class="winner-label">
+                GAME OVER
+            </div>
+
+
+            <h2 id="winnerText">
+                Black Wins!
+            </h2>
+
+
+            <p id="winnerReason">
+                Your opponent has no legal moves.
+            </p>
+
+
+            <div class="final-stats">
+
+                <div>
+
+                    <span>
+                        Moves
+                    </span>
+
+                    <strong id="finalMoves">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Captures
+                    </span>
+
+                    <strong id="finalCaptures">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Kings
+                    </span>
+
+                    <strong id="finalQueens">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="playAgainButton"
+                class="play-again-button"
+            >
+                Play Again
+            </button>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<script src="js/game.js"></script>
+
+</body>
+
+</html>
